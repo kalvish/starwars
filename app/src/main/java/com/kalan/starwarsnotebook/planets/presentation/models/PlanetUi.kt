@@ -7,7 +7,9 @@ data class PlanetUi(
     val climate: String,
     val terrain: String,
     val population: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val orbitalPeriod: String,
+    val gravity: String
 )
 
 fun Planet.toUI(): PlanetUi = PlanetUi(
@@ -15,5 +17,7 @@ fun Planet.toUI(): PlanetUi = PlanetUi(
     climate = climate,
     terrain = terrain,
     population = population,
-    imageUrl = "https://picsum.photos/seed/${name}/400/300"
+    imageUrl = "https://picsum.photos/seed/${name}/400/300",
+    orbitalPeriod = orbitalPeriod,
+    gravity = gravity
 )

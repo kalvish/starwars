@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kalan.starwarsnotebook.code.presentation.util.ObserveAsEvents
 import com.kalan.starwarsnotebook.code.presentation.util.toString
+import com.kalan.starwarsnotebook.planets.presentation.planet_details.PlanetDetailsScreen
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListEvent
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListViewModel
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.components.PlanetListScreen
@@ -41,11 +42,21 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                    PlanetListScreen(
-                        state = state,
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    when {
+                        state.selectedPlanet !=null -> {
+                            PlanetDetailsScreen(
+                                state = state,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                        else -> {
+                            PlanetListScreen(
+                                state = state,
+                                onAction = viewModel::onAction,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                    }
                 }
             }
         }

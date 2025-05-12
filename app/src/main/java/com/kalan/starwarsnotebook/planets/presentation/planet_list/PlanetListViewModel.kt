@@ -62,10 +62,25 @@ class PlanetListViewModel(
         }
     }
 
-    fun loadNextPageIfNeeded() {
+    private fun loadNextPageIfNeeded() {
         val next = _state.value.nextPageUrl
         if (!next.isNullOrBlank()) {
             loadPlanets(next)
+        }
+    }
+
+    fun onAction(action: PlanetListAction) {
+        when(action) {
+            is PlanetListAction.OnPlanetClick -> {
+                _state.update {
+                    it.copy(
+                        selectedPlanet = action.planetUi
+                    )
+                }
+            }
+            is PlanetListAction.OnLoadNextPageIfNeeded -> {
+                loadNextPageIfNeeded()
+            }
         }
     }
 }

@@ -16,15 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListAction
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListState
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListViewModel
 
 @Composable
 fun PlanetListScreen(
     state: PlanetListState,
-    viewModel: PlanetListViewModel,
+    onAction: (PlanetListAction) -> Unit,
     modifier: Modifier = Modifier
 ){
     if(state.isLoading) {
@@ -37,19 +39,22 @@ fun PlanetListScreen(
     } else {
         LazyColumn (modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.onSecondary),
+            .background(MaterialTheme.colorScheme.onSecondary)
+            .testTag("PlanetList"),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
             itemsIndexed(state.planets) { index, planetUi ->
                 if (index >= state.planets.size -1) {
                     LaunchedEffect(Unit) {
-                        viewModel.loadNextPageIfNeeded()
+                        onAction(PlanetListAction.OnLoadNextPageIfNeeded(null))
                     }
                 }
 
                 PlanetListItem(
                     planetUi = planetUi,
-                    onClick = {},
+                    onClick = {
+                        onAction(PlanetListAction.OnPlanetClick(planetUi))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
                 HorizontalDivider()
