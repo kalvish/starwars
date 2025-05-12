@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kalan.starwarsnotebook.code.navigation.AdaptivePlanetListDetailsPane
 import com.kalan.starwarsnotebook.code.presentation.util.ObserveAsEvents
 import com.kalan.starwarsnotebook.code.presentation.util.toString
 import com.kalan.starwarsnotebook.planets.presentation.planet_details.PlanetDetailsScreen
@@ -28,35 +29,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             StarWarsNoteBookTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val viewModel = koinViewModel<PlanetListViewModel>()
-                    val state by viewModel.state.collectAsStateWithLifecycle()
-                    val context = LocalContext.current
-                    ObserveAsEvents(events = viewModel.events) { event ->
-                        when(event) {
-                            is PlanetListEvent.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    event.error.toString(context),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-                    when {
-                        state.selectedPlanet !=null -> {
-                            PlanetDetailsScreen(
-                                state = state,
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
-                        else -> {
-                            PlanetListScreen(
-                                state = state,
-                                onAction = viewModel::onAction,
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
-                    }
+                    AdaptivePlanetListDetailsPane(
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
