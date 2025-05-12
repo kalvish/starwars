@@ -3,6 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.10"  // Or the latest version
+    reportsDirectory = file("$buildDir/jacoco")  // Output directory for reports
 }
 
 android {
@@ -25,6 +31,9 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://swapi.dev/api/\"")
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+
         }
         release {
             isMinifyEnabled = false
@@ -98,4 +107,33 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("connectedDebugAndroidTest")
+    dependsOn("testDebugUnitTest")
+
+    executionData.setFrom(
+        fileTree("${buildDir}/outputs/code_coverage/debugAndroidTest/connected") {
+            include("**/*.ec")
+        }
+    )
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    classDirectories.setFrom(
+        fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+            exclude(
+                "**/R.class",
+                "**/R$*.class",
+                "**/BuildConfig.*",
+                "**/Manifest*.*",
+                "**/*Test*.*"
+            )
+        }
+    )
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
 }
