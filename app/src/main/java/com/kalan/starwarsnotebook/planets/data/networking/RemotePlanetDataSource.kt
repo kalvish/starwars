@@ -8,6 +8,7 @@ import com.kalan.starwarsnotebook.core.domain.util.map
 import com.kalan.starwarsnotebook.planets.data.mappers.toPlanet
 import com.kalan.starwarsnotebook.planets.data.networking.nao.PlanetResponseNao
 import com.kalan.starwarsnotebook.planets.domain.Planet
+import com.kalan.starwarsnotebook.planets.domain.PlanetPage
 import com.kalan.starwarsnotebook.planets.domain.PlanetsDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -15,13 +16,16 @@ import io.ktor.client.request.get
 class RemotePlanetDataSource(
     private val httpClient: HttpClient
 ): PlanetsDataSource {
-    override suspend fun getPlanets(): Result<List<Planet>, NetworkError> {
+    override suspend fun getPlanets(nextUrl: String?): Result<PlanetPage, NetworkError> {
         return safeCall<PlanetResponseNao> {
             httpClient.get (
-                urlString = constructUrl("/planets")
+                urlString = constructUrl(nextUrl ?: "/planets/?page=1")
             )
         }.map { response ->
-            response.results.map { it.toPlanet() }
+            PlanetPage(
+                planets = response.results.map { it.toPlanet() },
+                nextPageUrl = response.next
+            )
         }
     }
 }

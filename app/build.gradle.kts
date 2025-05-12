@@ -87,5 +87,10 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
 
+    //OKHTTP is used bypass certificate path expiration issue. Only testing.
     implementation(libs.okhttp)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
 }

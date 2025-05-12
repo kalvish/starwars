@@ -34,29 +34,38 @@ class PlanetListViewModel(
     private val _events = Channel<PlanetListEvent>()
     val events = _events.receiveAsFlow()
 
-    private fun loadPlanets() {
+    private var isLoadingMore = false // Prevent double fetch
+
+    private fun loadPlanets(url: String? = null) {
+        // Prevent pagination overlap
+        if (isLoadingMore) return
+        isLoadingMore = true
         viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
+            _state.update { it.copy( isLoading = true) }
             plantsDataSource
-                .getPlanets()
-                .onSuccess { planets ->
+                .getPlanets(url)
+                .onSuccess { page ->
                     _state.update {
                         it.copy(isLoading = false,
-                            planets = planets.map { planet ->
+                            planets = it.planets + page.planets.map { planet ->
                                 planet.toUI()
-                            })
+                            },
+                            nextPageUrl = page.nextPageUrl
+                        )
                     }
                 }
                 .onError { error ->
-                    _state.update {
-                        it.copy(isLoading = false)
-                    }
+                    _state.update { it.copy(isLoading = false) }
                     _events.send(PlanetListEvent.Error(error))
                 }
+            isLoadingMore = false
+        }
+    }
+
+    fun loadNextPageIfNeeded() {
+        val next = _state.value.nextPageUrl
+        if (!next.isNullOrBlank()) {
+            loadPlanets(next)
         }
     }
 }

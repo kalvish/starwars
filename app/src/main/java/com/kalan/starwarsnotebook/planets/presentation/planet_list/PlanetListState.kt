@@ -7,5 +7,6 @@ import com.kalan.starwarsnotebook.planets.presentation.models.PlanetUi
 data class PlanetListState(
     val isLoading: Boolean = false,
     val planets: List<PlanetUi> = emptyList(),
-    val selectedPlanet: PlanetUi? = null
+    val selectedPlanet: PlanetUi? = null,
+    val nextPageUrl: String? = null
 )

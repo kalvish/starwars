@@ -15,6 +15,8 @@ import org.koin.dsl.module
 val appModule = module {
     single {
 //        HttpClientFactory.create(CIO.create())
+        //Switched to allowing connecting to backend even without a valid TLS certificate
+        //Only for TESTING Purpose
         HttpClientFactory.create(UnsafeEngineProvider.getUnsafeOkHttpEngine())
     }
     singleOf(::RemotePlanetDataSource).bind<PlanetsDataSource>()
