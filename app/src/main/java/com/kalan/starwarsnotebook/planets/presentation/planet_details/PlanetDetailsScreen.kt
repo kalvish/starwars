@@ -71,7 +71,7 @@ fun PlanetDetailsScreen(
                     textAlign = TextAlign.Center,
                     color = contentColor
                 )
-                Spacer(modifier = modifier
+                Spacer(modifier = Modifier
                     .padding(8.dp))
                 Text(
                     text = "${planet.orbitalPeriod} day(s)",
@@ -80,7 +80,7 @@ fun PlanetDetailsScreen(
                     textAlign = TextAlign.Center,
                     color = contentColor
                 )
-                Spacer(modifier = modifier
+                Spacer(modifier = Modifier
                     .padding(8.dp))
                 Text(
                     text = " ${planet.gravity} m/s^2",
@@ -89,7 +89,7 @@ fun PlanetDetailsScreen(
                     textAlign = TextAlign.Center,
                     color = contentColor
                 )
-                Spacer(modifier = modifier
+                Spacer(modifier = Modifier
                     .padding(8.dp))
                 AsyncImage(
                     model = planet.imageUrlHighRes,

@@ -29,6 +29,7 @@ import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListVie
 fun PlanetListScreen(
     state: PlanetListState,
     onAction: (PlanetListAction) -> Unit,
+    isPhone: Boolean = true,
     modifier: Modifier = Modifier
 ){
     if(state.isLoading) {
@@ -52,7 +53,7 @@ fun PlanetListScreen(
                     }
                 }
 
-                val isSelected = state.selectedPlanet?.name == planetUi.name
+                val isSelected = state.selectedPlanet?.name == planetUi.name && !isPhone
                 PlanetListItem(
                     planetUi = planetUi,
                     isSelected = isSelected,

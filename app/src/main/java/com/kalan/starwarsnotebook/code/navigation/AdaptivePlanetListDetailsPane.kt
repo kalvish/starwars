@@ -64,6 +64,7 @@ fun AdaptivePlanetListDetailsPane (
                 var planetClicked by remember { mutableStateOf(false) }
                 PlanetListScreen(
                     state = state,
+                    isPhone = isPhone,
                     onAction = { action ->
                         viewModel.onAction(action)
                         when(action) {
