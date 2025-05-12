@@ -10,21 +10,21 @@
 ### Planet list page
 #### Features
 *  Scrolling will add new planets to the page.
-* 
-![Planets list page](repoimages/screenshot_planetscreen.png)
+*
+<img src="repoimages/screenshot_planetscreen.png" alt="Planets list page" width="400"/>
 
 ### Planet details page
 #### Features
 *  Scrolling will add new planets to the page.
 *
-![Planets details page](repoimages/screenshot_planetdetails.png)
+<img src="repoimages/screenshot_planetdetails.png" alt="Planets details page" width="400"/>
 
 
 ### Tablets/Larger screns
 #### Features
 *  List and details view on same page
-
-![Planets view on larger screens](repoimages/screenshot_planetdetailspane.png)
+* 
+<img src="repoimages/screenshot_planetdetailspane.png" alt="Planets view on larger screens" width="600"/>
 
 
 
