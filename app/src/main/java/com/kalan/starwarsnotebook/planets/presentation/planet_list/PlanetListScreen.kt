@@ -1,5 +1,7 @@
 package com.kalan.starwarsnotebook.planets.presentation.planet_list.components
 
+import com.kalan.starwarsnotebook.planets.presentation.planet_list.components.PlanetListItem
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,8 +52,10 @@ fun PlanetListScreen(
                     }
                 }
 
+                val isSelected = state.selectedPlanet?.name == planetUi.name
                 PlanetListItem(
                     planetUi = planetUi,
+                    isSelected = isSelected,
                     onClick = {
                         onAction(PlanetListAction.OnPlanetClick(planetUi))
                     },
