@@ -1,11 +1,15 @@
 package com.kalan.starwarsnotebook.code.navigation
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,7 +28,7 @@ import com.kalan.starwarsnotebook.planets.presentation.planet_list.PlanetListVie
 import com.kalan.starwarsnotebook.planets.presentation.planet_list.components.PlanetListScreen
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun AdaptivePlanetListDetailsPane (
     modifier: Modifier = Modifier,
@@ -33,6 +37,12 @@ fun AdaptivePlanetListDetailsPane (
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+
+    //Calculate is it phone or not?
+    val activity = remember(context) { context as? Activity }
+    val windowSizeClass = activity?.let { calculateWindowSizeClass(it) }
+    val isPhone = windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Compact
+
     ObserveAsEvents(events = viewModel.events) { event ->
         when(event) {
             is PlanetListEvent.Error -> {
@@ -77,7 +87,7 @@ fun AdaptivePlanetListDetailsPane (
         detailPane = {
             AnimatedPane {
                 val isDetailsScreenOnly =
-                    navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail
+                    navigator.currentDestination?.pane == ListDetailPaneScaffoldRole.Detail && isPhone
                 var backClicked by remember { mutableStateOf(false) }
                 PlanetDetailsScreen(
                     state = state,
